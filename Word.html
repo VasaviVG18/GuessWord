@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Guessing Game</title>
+<link rel="stylesheet" href="Index.css"> 
+</head>
+<body>
+<h1>Word Guessing Game</h1>
+<p>Guess the word by typing a letter and press enter. You have <span id="attempts"></span> attempts remaining.</p>
+<input type="text" id="guessInput">
+<button onclick="checkGuess()">Guess</button>
+<p id="message"></p>
+
+<script>
+// Array of words to guess
+const words = ["apple", "banana", "orange", "grape", "kiwi"];
+
+// Select a random word from the array
+const randomIndex = Math.floor(Math.random() * words.length);
+let selectedWord = words[randomIndex];
+
+// Set up variables
+let attempts = 5;
+let guessedWord = "";
+
+// Initialize attempts count
+document.getElementById("attempts").innerText = attempts;
+
+// Initialize guessedWord with underscores
+for (let i = 0; i < selectedWord.length; i++) {
+    guessedWord += "_";
+}
+
+// Display guessedWord
+document.getElementById("message").innerText = guessedWord;
+
+// Function to check user's guess
+function checkGuess() {
+    let guess = document.getElementById("guessInput").value.toLowerCase();
+    if (guess.length !== 1) {
+        alert("Please enter only one letter.");
+        return;
+    }
+    if (selectedWord.includes(guess)) {
+        for (let i = 0; i < selectedWord.length; i++) {
+            if (selectedWord[i] === guess) {
+                guessedWord = guessedWord.substring(0, i) + guess + guessedWord.substring(i + 1);
+            }
+        }
+        document.getElementById("message").innerText = guessedWord;
+        if (guessedWord === selectedWord) {
+            document.getElementById("message").innerText = "Congratulations! You guessed the word!";
+            document.getElementById("guessInput").setAttribute("disabled", "disabled");
+        }
+    } else {
+        attempts--;
+        document.getElementById("attempts").innerText = attempts;
+        if (attempts === 0) {
+            document.getElementById("message").innerText = "Game Over! The word was: " + selectedWord;
+            document.getElementById("guessInput").setAttribute("disabled", "disabled");
+        }
+    }
+}
+</script>
+</body>
+</html>
+
